@@ -1,0 +1,15 @@
+<?php
+/**
+ * Plugin Name: Custom Tables Plugin
+ * Description: Plugin for managing custom tables and exposing data via REST endpoints.
+ * Version: 1.0.0
+ * Author: Sumit Gupta
+ * Text Domain: custom-tables-plugin
+ */
+
+// Load text domain
+add_action( 'plugins_loaded', 'custom_tables_plugin_load_textdomain' );
+
+function custom_tables_plugin_load_textdomain() {
+    load_plugin_textdomain( 'custom-tables-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
