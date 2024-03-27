@@ -19,3 +19,4 @@ Plugin for managing custom tables and exposing data via REST endpoints.
 ## License
 This project is licensed under the [GNU General Public License v2 (or later)](https://www.gnu.org/licenses/gpl-2.0.html).
 # custom-tables-plugin
+# custom-tables-plugin
