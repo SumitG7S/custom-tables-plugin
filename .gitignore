@@ -1,0 +1,12 @@
+# Exclude IDE files
+.idea/
+
+# Exclude temporary files
+*.log
+*.tmp
+
+# Exclude build outputs
+/build/
+/dist/
+/node_modules/
+/vendor/

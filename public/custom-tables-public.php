@@ -1,33 +1,37 @@
 <?php
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-// Custom Tables Public Class
+/**
+ * Custom Tables Public Class
+ */
 class Custom_Tables_Public {
-    // Constructor
+    /**
+     * Constructor.
+     */
     public function __construct() {
         // Add shortcode for displaying data
-        add_shortcode( 'custom_data', array( $this, 'display_custom_data_shortcode' ) );
+        add_shortcode('custom_data', array($this, 'display_custom_data_shortcode'));
 
         // Register REST API endpoints
-        add_action( 'rest_api_init', array( $this, 'register_rest_endpoints' ) );
+        add_action('rest_api_init', array($this, 'register_rest_endpoints'));
     }
 
-    // Method to display data via shortcode
+    /**
+     * Method to display data via shortcode.
+     */
     public function display_custom_data_shortcode() {
-        // Implement logic to retrieve data from custom tables or ORM
         $data = $this->get_custom_data();
 
-        // Display data
         ob_start();
         ?>
         <div class="custom-data">
-            <?php if ( $data ) : ?>
+            <?php if ($data) : ?>
                 <ul>
-                    <?php foreach ( $data as $item ) : ?>
-                        <li><?php echo esc_html( $item->name ); ?></li>
+                    <?php foreach ($data as $item) : ?>
+                        <li><?php echo esc_html($item->name); ?></li>
                     <?php endforeach; ?>
                 </ul>
             <?php else : ?>
@@ -38,34 +42,38 @@ class Custom_Tables_Public {
         return ob_get_clean();
     }
 
-    // Method to retrieve data from custom tables or ORM
+    /**
+     * Method to retrieve data from custom tables or ORM.
+     */
     private function get_custom_data() {
-        // Implement logic to retrieve data from custom tables or ORM
         global $wpdb;
 
         $table_name = $wpdb->prefix . 'custom_data';
-        $data = $wpdb->get_results( "SELECT * FROM $table_name" );
+        $data = $wpdb->get_results("SELECT * FROM $table_name");
 
         return $data;
     }
 
-    // Method to register REST API endpoints
+    /**
+     * Method to register REST API endpoints.
+     */
     public function register_rest_endpoints() {
-        register_rest_route( 'custom-tables/v1', '/data', array(
+        register_rest_route('custom-tables/v1', '/data', array(
             'methods'  => 'GET',
-            'callback' => array( $this, 'get_custom_data_rest' ),
-        ) );
+            'callback' => array($this, 'get_custom_data_rest'),
+        ));
     }
 
-    // Method to retrieve data via REST API
-    public function get_custom_data_rest( $request ) {
-        // Implement logic to retrieve data from custom tables or ORM
+    /**
+     * Method to retrieve data via REST API.
+     */
+    public function get_custom_data_rest($request) {
         $data = $this->get_custom_data();
 
-        if ( $data ) {
-            return rest_ensure_response( $data );
+        if ($data) {
+            return rest_ensure_response($data);
         } else {
-            return new WP_Error( 'no_data', 'No data found', array( 'status' => 404 ) );
+            return new WP_Error('no_data', 'No data found', array('status' => 404));
         }
     }
 }

@@ -4,26 +4,28 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Include the custom data list table file
-require_once plugin_dir_path(__FILE__) . 'custom-data-list-table.php';
-
-// Custom Tables Admin Class
+/**
+ * Custom Tables Admin Class
+ */
 class Custom_Tables_Admin {
-    // Initialize the class
+    /**
+     * Constructor.
+     */
     public function __construct() {
-        // Add hooks
+        // Hooks
         register_activation_hook(__FILE__, array($this, 'create_custom_tables'));
         add_action('admin_menu', array($this, 'add_custom_tables_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('admin_post_custom_data_submit', array($this, 'handle_custom_data_submit'));
     }
 
-    // Method to create custom tables on plugin activation
+    /**
+     * Method to create custom tables on plugin activation.
+     */
     public function create_custom_tables() {
         global $wpdb;
 
         $table_name = $wpdb->prefix . 'custom_data';
-
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
@@ -41,7 +43,9 @@ class Custom_Tables_Admin {
         dbDelta($sql);
     }
 
-    // Method to add menu for custom tables admin page
+    /**
+     * Method to add menu for custom tables admin page.
+     */
     public function add_custom_tables_menu() {
         add_menu_page(
             'Custom Tables',
@@ -54,20 +58,17 @@ class Custom_Tables_Admin {
         );
     }
 
-    // Method to display custom tables admin page
+    /**
+     * Method to display custom tables admin page.
+     */
     public function custom_tables_admin_page() {
         ?>
         <div class="wrap">
             <h1>Custom Tables Administration</h1>
             <!-- Add WP-List Table and forms here -->
             <?php
-            // Instantiate the custom data list table
             $custom_data_list_table = new Custom_Data_List_Table();
-            
-            // Prepare items
             $custom_data_list_table->prepare_items();
-            
-            // Display the list table
             $custom_data_list_table->display();
             ?>
             <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
@@ -91,30 +92,14 @@ class Custom_Tables_Admin {
         <?php
     }
 
-    // Method to enqueue admin scripts
-    public function enqueue_admin_scripts($hook) {
-        // Enqueue scripts only on your plugin's admin page
-        if ('toplevel_page_custom-tables-admin' != $hook) {
-            return;
-        }
-
-        // Enqueue CSS
-        wp_enqueue_style('custom-tables-admin-css', plugin_dir_url(__FILE__) . 'css/custom-tables-admin.css', array(), '1.0.0', 'all');
-
-        // Enqueue JavaScript
-        wp_enqueue_script('custom-tables-admin-js', plugin_dir_url(__FILE__) . 'js/custom-tables-admin.js', array('jquery'), '1.0.0', true);
-    }
-
-    // Method to handle form submissions
+   
+     
     public function handle_custom_data_submit() {
-        // Check if nonce field is set for security
         if (!isset($_POST['custom_data_nonce']) || !wp_verify_nonce($_POST['custom_data_nonce'], 'custom_data_submit')) {
             wp_die('Unauthorized access');
         }
 
-        // Check if form data is submitted
         if (isset($_POST['submit'])) {
-            // Retrieve form data
             $name = sanitize_text_field($_POST['name']);
             $email = sanitize_email($_POST['email']);
             $phone = sanitize_text_field($_POST['phone']);
@@ -122,7 +107,6 @@ class Custom_Tables_Admin {
             $address = sanitize_textarea_field($_POST['address']);
             $status = sanitize_text_field($_POST['status']);
 
-            // Insert data into custom table using WPDB
             global $wpdb;
             $table_name = $wpdb->prefix . 'custom_data';
             $wpdb->insert(
@@ -137,7 +121,6 @@ class Custom_Tables_Admin {
                 )
             );
 
-            // Redirect after form submission
             wp_redirect(admin_url('admin.php?page=custom-tables-admin'));
             exit;
         }
@@ -146,4 +129,3 @@ class Custom_Tables_Admin {
 
 // Instantiate the class
 new Custom_Tables_Admin();
-

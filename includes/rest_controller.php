@@ -59,7 +59,7 @@ class Custom_REST_Controller extends WP_REST_Controller {
     public function create_item($request) {
         $data = $request->get_params();
 
-        // Example: Insert data into custom table
+        //  Insert data into custom table
         global $wpdb;
         $wpdb->insert(
             $wpdb->prefix . 'custom_data',
@@ -99,7 +99,7 @@ class Custom_REST_Controller extends WP_REST_Controller {
         $id = $request['id'];
         $data = $request->get_params();
 
-        // Example: Update data in custom table
+        //  Update data in custom table
         global $wpdb;
         $wpdb->update(
             $wpdb->prefix . 'custom_data',
@@ -121,7 +121,7 @@ class Custom_REST_Controller extends WP_REST_Controller {
     public function delete_item($request) {
         $id = $request['id'];
 
-        // Example: Delete data from custom table
+        // Delete data from custom table
         global $wpdb;
         $wpdb->delete(
             $wpdb->prefix . 'custom_data',
